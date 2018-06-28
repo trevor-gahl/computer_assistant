@@ -10,37 +10,45 @@ import os
 import shutil
 from os import walk
 
-files = []
-splitFiles = []
-fileExtensions = []
 
-# Gather list of filenames in current working directory
-for (dirpath, dirnames, filenames) in walk(os.getcwd()):
-    files.extend(filenames)
-    break
+def fileSort:
 
-# Split file extensions off from file names
-for x in files:
-    splitFiles.extend(x.split('.'))
+    files = []
+    splitFiles = []
+    fileExtensions = []
 
-# Create a list of file extensions based on extensions in directory
-for y in range(len(splitFiles)):
-    if (y%2==1):
-        fileExtensions.append(splitFiles[y])
-        fileSet = set(fileExtensions)
-        fileExtensions = list(fileSet)
+    # Gather list of filenames in current working directory
+    for (dirpath, dirnames, filenames) in walk(os.getcwd()):
+        files.extend(filenames)
+        break
 
-# Check if folder for desired file extension exists, if not create it
-for z in fileExtensions:
-    if not os.path.exists(z):
-        os.makedirs(z)
-
-# Iterate through original list of files and move to corresponding folders
-for i in range(len(files)):
-    print(files[i])
-    for j in fileExtensions:
-        if (j=="ini"):
+    # Split file extensions off from file names
+    for x in files:
+        if (x.count(".")>1):
+            print("Invalid file name, multiple instances of '.' in file name\n")
+            print(x)
             continue
-        elif files[i].endswith(j):
-            print("true")
-            shutil.move(files[i],j)
+        else:
+            splitFiles.extend(x.split('.'))
+
+    # Create a list of file extensions based on extensions in directory
+    for y in range(len(splitFiles)):
+        if (y%2==1):
+            fileExtensions.append(splitFiles[y])
+            fileSet = set(fileExtensions)
+            fileExtensions = list(fileSet)
+
+    # Check if folder for desired file extension exists, if not create it
+    for z in fileExtensions:
+        if not os.path.exists(z):
+            os.makedirs(z)
+
+    # Iterate through original list of files and move to corresponding folders
+    for i in range(len(files)):
+        print(files[i])
+        for j in fileExtensions:
+            if (j=="ini"):
+                continue
+            elif files[i].endswith(j):
+                print("true")
+                shutil.move(files[i],j)
