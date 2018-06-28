@@ -11,7 +11,7 @@ import shutil
 from os import walk
 
 
-def fileSort:
+def fileSort():
 
     files = []
     splitFiles = []
@@ -24,8 +24,9 @@ def fileSort:
 
     # Split file extensions off from file names
     for x in files:
+        # Prevent erroneous folder creation by ensuring validity of file extension
         if (x.count(".")>1):
-            print("Invalid file name, multiple instances of '.' in file name\n")
+            print("Invalid file name, multiple instances of '.' in file name")
             print(x)
             continue
         else:
@@ -40,15 +41,25 @@ def fileSort:
 
     # Check if folder for desired file extension exists, if not create it
     for z in fileExtensions:
-        if not os.path.exists(z):
+        if (z == "ini"):
+            continue
+        elif not os.path.exists(z):
             os.makedirs(z)
 
     # Iterate through original list of files and move to corresponding folders
     for i in range(len(files)):
-        print(files[i])
         for j in fileExtensions:
             if (j=="ini"):
                 continue
             elif files[i].endswith(j):
-                print("true")
-                shutil.move(files[i],j)
+                try:
+                    shutil.move(files[i],j)
+                except Exception as e:
+                    print("File already exists: ")
+                    print(files[i])
+                    shutil.copy(files[i],j)
+                    os.remove(files[i])
+
+
+
+fileSort()
